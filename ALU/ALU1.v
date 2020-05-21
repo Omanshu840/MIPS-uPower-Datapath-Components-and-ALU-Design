@@ -1,5 +1,4 @@
 `include "AddSub.v"
-`include "mux21.v"
 
 module ALU1(Result,CarryOut,A,B,carryin,less,ALUop);
     
@@ -11,7 +10,7 @@ module ALU1(Result,CarryOut,A,B,carryin,less,ALUop);
     
     xor #(50) xor1(xorOut,A,B);
     
-    mux21 mux2(xorlessOut,xorOut,less,ALUop[1]);
-    mux21 mux3(Result,addsubOut,xorlessOut,ALUop[0]);
+    mux21 m2 (xorlessOut,xorOut,less,ALUop[1]);
+    mux21 m3 (Result,addsubOut,xorlessOut,ALUop[0]);
 
 endmodule

@@ -1,6 +1,6 @@
 `include "ALU1.v"
 
-module alu(Result, CarryOut, Zero, Overflow, negative, A, B, ALUop);
+module ALU64(Result, CarryOut, Zero, Overflow, negative, A, B, ALUop);
     
     
     output CarryOut,Overflow,negative,Zero;

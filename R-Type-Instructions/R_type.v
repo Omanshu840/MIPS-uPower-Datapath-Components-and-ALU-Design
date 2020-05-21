@@ -1,3 +1,5 @@
+`include "./ALU/ALU64.v"
+
 
 module R_Type(r1, r2, r3, clk, funct, rs, rt, rd);
 
