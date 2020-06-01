@@ -1,39 +1,64 @@
-module I_Type(r1,imm,r3,clk,funct,a,rd,b);
+`include "ALUControlUnit.v"
+`include "ALU.v"
 
-    input [4:0] r1;
-    input [11:0] imm;              // 12-bit immediate value
-    input [4:0] r3;
-    input [5:0] funct;
+
+module I_Type(OpCode, rs, rt, imm, clk, datars, datart);
+
+    input [5:0] OpCode;
+    input [4:0] rs;
+    input [4:0] rt;
+    input [15:0] imm;
     input clk;
-    reg [63:0] regFile[0:31];
-    output wire [31:0] a;
-    output reg [31:0] b;           // 'b' converts 12 bit immediate value to 32 bits
-    output wire [31:0] rd;
-    wire cout, zero, overflow;
+
+    reg [31:0] regFile[0:31];
+
+    reg [31:0] Mem[0:31];
+    
+    output wire [31:0] datars;
+    output wire [31:0] datart;
+
+    wire [31:0] Result;
+
+    wire [31:0]Immediate;
+
+    assign Immediate[15:0] = imm[15:0];
+    assign Immediate[31:16] = {16{imm[15]}};
+
+    wire carryout, zero, Overflow;
+
     integer i;
+    
     initial
     begin
-        for(i=0;i<32;i=i+1)
+        for (i=0; i<31; i++)
         begin
-            regFile[i] <= i;
+            regFile[i] = i;
         end
     end
-    //ReadModule
-        assign a=regFile[r1];
-        
 
-        always@(*)
+    initial
+    begin
+        for (i=0; i<31; i++)
         begin
-            b[11:0]= imm[11:0];
-            b[31:12]={20{imm[11]}};
+            Mem[i] = i;
         end
+    end
 
-        
-    ALU64 m1(a,b,funct[3:0],funct[5:4],rd,cout,zero,overflow);
-    //WriteModule
-        always@(posedge clk)
-        begin	
-            regFile[r3] <= rd;
-        end
+    assign datars = regFile[rs];
+    assign datart = regFile[rt];
+
+    wire [3:0] ALUControl;
+
+    ALUControlUnit Q0(ALUControl, 2'b00, imm[5:0]);
+
+    MIPS_ALU_32b Q1 (datars, Immediate, ALUControl, Result, Overflow, zero);
+
+    always@(posedge clk)
+    begin
+        case (OpCode)
+            6'b100011: regFile[rt] <= Mem[Result];
+            6'b101011: Mem[Result] <= regFile[rt];
+        endcase
+    end
 
 endmodule
