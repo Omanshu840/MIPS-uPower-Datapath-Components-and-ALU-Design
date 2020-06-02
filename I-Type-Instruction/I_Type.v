@@ -30,7 +30,7 @@ module I_Type(OpCode, rs, rt, imm, clk, datars, datart);
     
     initial
     begin
-        for (i=0; i<31; i++)
+        for (i=0; i<31; i=i+1)
         begin
             regFile[i] = i;
         end
@@ -38,7 +38,7 @@ module I_Type(OpCode, rs, rt, imm, clk, datars, datart);
 
     initial
     begin
-        for (i=0; i<31; i++)
+        for (i=0; i<31; i=i+1)
         begin
             Mem[i] = i;
         end
