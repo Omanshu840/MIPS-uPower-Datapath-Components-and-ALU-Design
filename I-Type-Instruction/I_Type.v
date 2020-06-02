@@ -1,5 +1,5 @@
-`include "ALUControlUnit.v"
-`include "ALU.v"
+`include "MIPS_ALUControlUnit.v"
+`include "ALU_32b.v"
 
 
 module I_Type(OpCode, rs, rt, imm, clk, datars, datart);
@@ -49,9 +49,9 @@ module I_Type(OpCode, rs, rt, imm, clk, datars, datart);
 
     wire [3:0] ALUControl;
 
-    ALUControlUnit Q0(ALUControl, 2'b00, imm[5:0]);
+    MIPS_ALUControlUnit Q0(ALUControl, 2'b00, imm[5:0]);
 
-    MIPS_ALU_32b Q1 (datars, Immediate, ALUControl, Result, Overflow, zero);
+    ALU_32b Q1 (datars, Immediate, ALUControl, Result, Overflow, zero);
 
     always@(posedge clk)
     begin
