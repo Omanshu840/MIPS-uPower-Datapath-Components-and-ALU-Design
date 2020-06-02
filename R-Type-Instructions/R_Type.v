@@ -1,5 +1,5 @@
-`include "ALUControlUnit.v"
-`include "ALU.v"
+`include "MIPS_ALUControlUnit.v"
+`include "ALU_32b.v"
 
 
 module R_Type(rs, rt, rd, clk, funct, datars, datart, datard);
@@ -33,9 +33,9 @@ module R_Type(rs, rt, rd, clk, funct, datars, datart, datard);
 
     wire [3:0] ALUControl;
 
-    ALUControlUnit Q0(ALUControl, 2'b10, funct);
+    MIPS_ALUControlUnit Q0(ALUControl, 2'b10, funct);
 
-    MIPS_ALU_32b Q1 (datars, datart, ALUControl, datard, Overflow, zero);
+    ALU_32b Q1 (datars, datart, ALUControl, datard, Overflow, zero);
 
     always@(posedge clk)
     begin
