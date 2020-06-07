@@ -11,8 +11,6 @@ module I_Type(OpCode, rs, rt, imm, clk, datars, datart);
     input clk;
 
     reg [31:0] regFile[0:31];
-
-    reg [31:0] Mem[0:31];
     
     output wire [31:0] datars;
     output wire [31:0] datart;
@@ -36,14 +34,6 @@ module I_Type(OpCode, rs, rt, imm, clk, datars, datart);
         end
     end
 
-    initial
-    begin
-        for (i=0; i<31; i=i+1)
-        begin
-            Mem[i] = i;
-        end
-    end
-
     assign datars = regFile[rs];
     assign datart = regFile[rt];
 
@@ -55,10 +45,9 @@ module I_Type(OpCode, rs, rt, imm, clk, datars, datart);
 
     always@(posedge clk)
     begin
-        case (OpCode)
-            6'b100011: regFile[rt] <= Mem[Result];
-            6'b101011: Mem[Result] <= regFile[rt];
-        endcase
+        
+        regFile[rt] <= Result;
+        
     end
 
 endmodule

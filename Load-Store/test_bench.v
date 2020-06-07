@@ -1,4 +1,4 @@
-`include "I_Type.v"
+`include "LWSW.v"
 
 module I_tb;
     reg [5:0] OpCode;
@@ -11,7 +11,7 @@ module I_tb;
     wire [31:0] datars;
     wire [31:0] datart;
 
-    I_Type m(OpCode, rs, rt, imm, clk, datars, datart);
+    LWSW m(OpCode, rs, rt, imm, clk, datars, datart);
 
     initial
         begin
@@ -22,7 +22,7 @@ module I_tb;
 
     initial
         begin
-            $dumpfile("I_type.vcd");
+            $dumpfile("LWSW.vcd");
             $dumpvars(0, I_tb);
 
             OpCode = 6'b100011; rs = 5'b011; rt = 5'b010; imm = 16'b101;
