@@ -2,10 +2,10 @@
 COA Assignment 3 
 Submitted by:
 
-Bhaskar Kataria		181CO213
-Ketan Kiran Bhujange	181CO227
-Manas Trivedi		181CO231
-Omanshu Mahawar		181CO237
+Bhaskar Kataria		181CO213 <br>
+Ketan Kiran Bhujange	181CO227 <br>
+Manas Trivedi		181CO231 <br>
+Omanshu Mahawar		181CO237 <br>
 
 
 This Assignment is divided in two parts : MIPS and UPower.
