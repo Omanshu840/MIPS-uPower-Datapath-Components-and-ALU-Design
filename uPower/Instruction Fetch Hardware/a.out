@@ -1,0 +1,95 @@
+#! /c/iverilog/bin/vvp
+:ivl_version "0.9.7 " "(v0_9_7)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_000E8720 .scope module, "tb_Instruction_Fetch_Hardware" "tb_Instruction_Fetch_Hardware" 2 3;
+ .timescale 0 0;
+v000EDC48_0 .net *"_s0", 31 0, C4<00000000010000000000000000000000>; 1 drivers
+v000EDCA0_0 .var "clk", 0 0;
+v000EDF88_0 .net "instruction", 31 0, v00861CE0_0; 1 drivers
+v000EE350_0 .net "pc_out", 31 0, L_000EED78; 1 drivers
+v000EDDD0_0 .var "reset", 0 0;
+v000EE248_0 .net "virtualPC", 31 0, L_000EDE80; 1 drivers
+L_000EDE80 .arith/sum 32, L_000EED78, C4<00000000010000000000000000000000>;
+S_000E7E18 .scope module, "IFH" "Instruction_Fetch_Hardware" 2 16, 3 21, S_000E8720;
+ .timescale 0 0;
+L_000EED78 .functor BUFZ 32, v000E3CB8_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+v000E1608_0 .net *"_s0", 31 0, C4<00000000000000000000000000000100>; 1 drivers
+v000E1660_0 .net "clk", 0 0, v000EDCA0_0; 1 drivers
+v000E16B8_0 .alias "instruction", 31 0, v000EDF88_0;
+v000E3CB8_0 .var "pc_current", 31 0;
+v000E3D10_0 .net "pc_next", 31 0, L_000EE198; 1 drivers
+v000E3D68_0 .alias "pc_out", 31 0, v000EE350_0;
+v000E3DC0_0 .net "reset", 0 0, v000EDDD0_0; 1 drivers
+E_00863E00 .event posedge, v000E3DC0_0, v000E1660_0;
+L_000EE198 .arith/sum 32, v000E3CB8_0, C4<00000000000000000000000000000100>;
+S_000E8A50 .scope module, "IM" "Instruction_Memory" 3 43, 3 1, S_000E7E18;
+ .timescale 0 0;
+v00861C88_0 .net "address", 31 0, v000E3CB8_0; 1 drivers
+v00861CE0_0 .var "instruction", 31 0;
+v00861D38 .array "instructionMemory", 0 1023, 31 0;
+E_00863D60 .event edge, v00861C88_0;
+    .scope S_000E8A50;
+T_0 ;
+    %vpi_call 3 10 "$readmemb", "instr.txt", v00861D38;
+    %end;
+    .thread T_0;
+    .scope S_000E8A50;
+T_1 ;
+    %wait E_00863D60;
+    %load/v 40, v00861C88_0, 32;
+    %movi 72, 4, 32;
+    %div 40, 72, 32;
+    %ix/get 3, 40, 32;
+    %load/av 8, v00861D38, 32;
+    %set/v v00861CE0_0, 8, 32;
+    %jmp T_1;
+    .thread T_1, $push;
+    .scope S_000E7E18;
+T_2 ;
+    %wait E_00863E00;
+    %load/v 8, v000E3DC0_0, 1;
+    %jmp/0xz  T_2.0, 8;
+    %ix/load 0, 32, 0;
+    %assign/v0 v000E3CB8_0, 0, 0;
+    %jmp T_2.1;
+T_2.0 ;
+    %load/v 8, v000E3D10_0, 32;
+    %ix/load 0, 32, 0;
+    %assign/v0 v000E3CB8_0, 0, 8;
+T_2.1 ;
+    %jmp T_2;
+    .thread T_2;
+    .scope S_000E8720;
+T_3 ;
+    %set/v v000EDCA0_0, 0, 1;
+    %movi 8, 10, 5;
+T_3.0 %cmp/s 0, 8, 5;
+    %jmp/0xz T_3.1, 5;
+    %add 8, 1, 5;
+    %delay 5, 0;
+    %load/v 13, v000EDCA0_0, 1;
+    %inv 13, 1;
+    %set/v v000EDCA0_0, 13, 1;
+    %jmp T_3.0;
+T_3.1 ;
+    %end;
+    .thread T_3;
+    .scope S_000E8720;
+T_4 ;
+    %vpi_call 2 30 "$dumpfile", "VCD_Instruction_Fetch_Hardware.vcd";
+    %vpi_call 2 31 "$dumpvars", 1'sb0, S_000E8720;
+    %vpi_call 2 32 "$monitor", $time, ": PC = %h, Instruction = %b", v000EE248_0, v000EDF88_0;
+    %set/v v000EDDD0_0, 1, 1;
+    %delay 1, 0;
+    %set/v v000EDDD0_0, 0, 1;
+    %end;
+    .thread T_4;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "tb_Instruction_Fetch_Hardware.v";
+    "./Instruction_Fetch_Hardware.v";
